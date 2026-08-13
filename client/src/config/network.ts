@@ -18,28 +18,50 @@ const BACKEND_PORT = 3001;
 function deriveApiBaseUrl(): string {
   const envUrl = import.meta.env.VITE_API_URL as string | undefined;
 
-  // If a non-localhost env URL is explicitly configured, use it (production/staging).
-  if (envUrl && !envUrl.includes('localhost') && !envUrl.includes('127.0.0.1')) {
-    return envUrl.replace(/\/$/, ''); // trim trailing slash
+  // 1. If an explicit env URL is configured, use it.
+  if (envUrl && envUrl.trim() !== '') {
+    return envUrl.replace(/\/$/, '');
   }
 
-  // Dynamically derive from the hostname the browser actually connected to.
-  // This works for both localhost and any LAN IP.
-  const hostname = window.location.hostname; // e.g. "localhost" or "10.10.32.207"
-  const protocol = window.location.protocol; // "http:" or "https:"
-  return `${protocol}//${hostname}:${BACKEND_PORT}/api/v1`;
+  const hostname = window.location.hostname;
+  const isLocalDev =
+    hostname === 'localhost' ||
+    hostname === '127.0.0.1' ||
+    /^192\.168\./.test(hostname) ||
+    /^10\./.test(hostname) ||
+    /^172\.(1[6-9]|2[0-9]|3[0-1])\./.test(hostname);
+
+  // 2. Local dev or LAN testing
+  if (isLocalDev) {
+    const protocol = window.location.protocol;
+    return `${protocol}//${hostname}:${BACKEND_PORT}/api/v1`;
+  }
+
+  // 3. Deployed production site (e.g. Vercel)
+  return '/api/v1';
 }
 
 function deriveWsBaseUrl(): string {
   const envUrl = import.meta.env.VITE_WS_URL as string | undefined;
 
-  if (envUrl && !envUrl.includes('localhost') && !envUrl.includes('127.0.0.1')) {
+  if (envUrl && envUrl.trim() !== '') {
     return envUrl.replace(/\/$/, '');
   }
 
   const hostname = window.location.hostname;
+  const isLocalDev =
+    hostname === 'localhost' ||
+    hostname === '127.0.0.1' ||
+    /^192\.168\./.test(hostname) ||
+    /^10\./.test(hostname) ||
+    /^172\.(1[6-9]|2[0-9]|3[0-1])\./.test(hostname);
+
   const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-  return `${wsProtocol}//${hostname}:${BACKEND_PORT}`;
+  if (isLocalDev) {
+    return `${wsProtocol}//${hostname}:${BACKEND_PORT}`;
+  }
+
+  return `${wsProtocol}//${hostname}`;
 }
 
 /**
