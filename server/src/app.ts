@@ -28,6 +28,21 @@ export function createApp() {
   // ─── Request ID (Module 12) ───────────────────────────────────────────────
   app.use(requestIdMiddleware);
 
+  // ─── Health Check & Root Endpoints (HEAD & GET for Render / Uptime Monitoring)
+  app.get(['/', '/health'], (_req, res) => {
+    res.status(200).json({
+      status: 'healthy',
+      name: 'AssetChain API',
+      version: env.APP_VERSION,
+      uptime: Math.floor(process.uptime()),
+      timestamp: new Date().toISOString(),
+    });
+  });
+
+  app.head(['/', '/health'], (_req, res) => {
+    res.status(200).end();
+  });
+
   // ─── Security Middleware ───────────────────────────────────────────────────
   app.use(helmet());
   app.use(cors(corsOptions));
