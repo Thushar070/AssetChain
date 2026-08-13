@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "npx tsc && npx vite build",
+    "build:client": "npx tsc && npx vite build",
     "lint": "tsc --noEmit",
     "preview": "vite preview"
   },
