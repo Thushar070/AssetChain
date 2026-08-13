@@ -1,0 +1,42 @@
+services:
+  - type: web
+    name: assetchain-backend
+    env: node
+    region: oregon
+    plan: free
+    rootDir: server
+    buildCommand: npm install && npm run build
+    startCommand: npm run start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: "10000"
+      - key: CLIENT_URL
+        value: https://assetchain-frontend.vercel.app
+      - key: CORS_ORIGIN
+        value: https://assetchain-frontend.vercel.app
+      - key: APP_VERSION
+        value: 2.1.0
+      - key: JWT_SECRET
+        value: assetchain_super_secret_jwt_key_min_32_characters_long
+      - key: JWT_EXPIRES_IN
+        value: 7d
+      - key: DOCUMENT_ENCRYPTION_KEY
+        value: 32_character_encryption_key_here!
+      - key: SUPABASE_URL
+        value: https://traiifakpwzwnkpcfdvj.supabase.co
+      - key: SUPABASE_ANON_KEY
+        value: sb_publishable_yFE0tSgFSVHC2UympqbIaQ_cL1hQT-O
+      - key: PINATA_API_KEY
+        value: mock_key
+      - key: PINATA_SECRET_KEY
+        value: mock_key
+      - key: PINATA_GATEWAY_URL
+        value: https://gateway.pinata.cloud/ipfs
+      - key: POLYGON_AMOY_RPC_URL
+        value: https://polygon-amoy.drpc.org
+      - key: DEPLOYER_PRIVATE_KEY
+        value: 0x0000000000000000000000000000000000000000000000000000000000000001
+      - key: MARKETPLACE_CONTRACT_ADDRESS
+        value: 0x835aaF7DAF1A323b42bF7367d037e55659EB3BcB
