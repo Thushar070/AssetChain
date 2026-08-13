@@ -17,8 +17,8 @@ export const corsOptions: CorsOptions = {
         return callback(null, true);
       }
     }
-    // Explicitly allow only configured origins in staging/production
-    if (configuredOrigins.includes(origin) || configuredOrigins.includes('*')) {
+    // Explicitly allow configured origins or any *.vercel.app frontend deployments
+    if (configuredOrigins.includes(origin) || configuredOrigins.includes('*') || /\.vercel\.app$/.test(origin)) {
       return callback(null, true);
     }
     callback(new Error(`CORS: Origin ${origin} not allowed`), false);

@@ -13,9 +13,9 @@ services:
       - key: PORT
         value: "10000"
       - key: CLIENT_URL
-        value: https://assetchain-frontend.vercel.app
+        value: https://assetchain-app.vercel.app
       - key: CORS_ORIGIN
-        value: https://assetchain-frontend.vercel.app
+        value: https://assetchain-app.vercel.app
       - key: APP_VERSION
         value: 2.1.0
       - key: JWT_SECRET
